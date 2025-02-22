@@ -1,109 +1,91 @@
 from pydantic import BaseModel
-from datetime import datetime, time
+from typing import Optional, List
+from datetime import datetime
+from models import UserRole, StatusCourse, TypeCourse
 
 
-class UserProfile(BaseModel):
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+
+class UserProfileSchema(BaseModel):
+    id: int
     first_name: str
     last_name: str
-    phone_number: str
-    age: int
-    profile_picture: str
+    username: str
+    password: str
+    phone_number: Optional[str] = None
+    age: Optional[int] = None
+    profile_picture: Optional[str] = None
+    role: UserRole
 
+    class Config:
+        from_attributes = True
 
-class Network(BaseModel):
-    network_name: str
-    network_link: str
-
-
-class Category(BaseModel):
+class CategorySchema(BaseModel):
+    id: int
     category_name: str
 
+    class Config:
+        from_attributes = True
 
-class Course(BaseModel):
+
+class CourseSchema(BaseModel):
+    id: int
     course_name: str
     description: str
-    category: str
-    author: str
-    level: tuple[str, str]
-    price: int
-    type_course: tuple[str, str]
+    level: StatusCourse
+    price: float
+    type_course: TypeCourse
     created_at: datetime
     updated_at: datetime
-    course_certificate: bool
+    author_id: int
 
 
-class Lesson(BaseModel):
+    class Config:
+        from_attributes = True
+
+
+class LessonSchema(BaseModel):
+    id: int
     title: str
-    video_url: str
-    video: str or None
-    content: str or None
+    video_url: Optional[str] = None
+    content: Optional[str] = None
+    course_id: int
 
 
-class Assignment(BaseModel):
+    class Config:
+        from_attributes = True
+
+
+class ExamSchema(BaseModel):
+    id: int
     title: str
-    description: str
-    due_date: datetime
-    course: str
-    students: str
+    course_id: int
+    end_time: int
+
+    class Config:
+        from_attributes = True
 
 
-class Exam(BaseModel):
-    title: str
-    course: str
-    end_time: time
-
-
-class Questions(BaseModel):
-    exam: str
+class QuestionSchema(BaseModel):
+    id: int
+    exam_id: int
     title: str
     score: int
 
 
-class Option(BaseModel):
-    questions: str
-    variant: str
-    option_check: bool
+    class Config:
+        from_attributes = True
 
 
-class Certificate(BaseModel):
-    student: str
-    course: str
+class CertificateSchema(BaseModel):
+    id: int
+    student_id: int
+    course_id: int
     issued_at: datetime
-    certificate_url: str or None
+    certificate_url: str
 
-
-class CourseReview(BaseModel):
-    course: str
-    user: str
-    text: str
-    stars: int
-
-
-class TeacherRating(BaseModel):
-    teacher: str
-    user: str
-    stars: int
-
-
-class History(BaseModel):
-    student: str
-    course: str
-    date: datetime
-
-
-class Cart(BaseModel):
-    student: str
-
-
-class CartItem(BaseModel):
-    cart: str
-    course: str
-
-
-class Favorite(BaseModel):
-    student: str
-
-
-class FavoriteItem(BaseModel):
-    favorite: str
-    course: str
+    class Config:
+        from_attributes = True
